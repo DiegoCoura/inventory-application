@@ -6,3 +6,20 @@ body {
 a {
   color: #00B7FF;
 }
+
+.products-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  object-fit: cover;
+}
+
+.product-card{
+  width: 150px;
+  display: flex;
+  flex-direction: column;  
+}
+
+.product-card img{
+  width: auto;
+  max-height: 80%;
+}

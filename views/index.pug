@@ -3,3 +3,13 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+
+  if all_products.length 
+    div.products-container
+      each product in all_products 
+        div.product-card
+          img(src=product.image)
+          a(href=product.url) #{product.title} 
+          p $ #{product.price}  
+  else
+    p $[strong Products not found]
