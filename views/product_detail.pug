@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+  h2 Product: #{product.title}
+
+  div.product_detail-card
+    img(src=product.image)
+    p #{product.description}
+    p $ #{product.price}
+    p Quantity in stock: #{product.quantity}
+    hr
+    a(href=`${product.url}/update`) Update  product
+    br
+    a(href=`${product.url}/delete`) Delete  product

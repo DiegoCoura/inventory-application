@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  h1= title
+  p Product: #{product.title}
+
+  form#product-form(method="post") 
+    label(for="title") Title: 
+    input#title(type="text", placeholder="Product Title" name="title" required value=(product === undefined ? '' : product.title))
+    br
+    label(for="description") Description: 
+    textarea#description(name="description", placeholder='Product description', cols="50" ,rows="20" required) #{(product === undefined ? '' : product.description)} 
+    br
+    label(for="price") Price: $
+    input#price(type="number", placeholder="Price", name="price", required value=(product === undefined ? "00.00" : product.price))
+    br
+    label(for="category") Category: 
+    select#category(name="category" required)
+      option(value='') --Please select an category-- 
+      for category in categories 
+        if product.category.name === category.name 
+          option(value=category._id selected) #{category.name}
+        else 
+          option(value=category._id) #{category.name}
+    br
+    label(for="image") Image URL:
+    input#image(type="text", placeholder="Image URL", name='image', required value=(product === undefined ? "" : product.image))
+    br
+    label(for="quantity") Quantity in stock: 
+    input#quantity(type="number", placeholder="Quantity", required, value=(product === undefined ? "" : product.quantity))
+    br
+    button.blue-btn(type="submit") Update
+

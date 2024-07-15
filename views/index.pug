@@ -10,6 +10,7 @@ block content
         div.product-card
           img(src=product.image)
           a(href=product.url) #{product.title} 
-          p $ #{product.price}  
+          p $ #{product.price}
+          button.blue-btn Add to Cart  
   else
-    p $[strong Products not found]
+    p #[strong Products not found ]
