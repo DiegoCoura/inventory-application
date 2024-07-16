@@ -34,6 +34,78 @@ exports.product_detail = asyncHandler(async (req, res, next) => {
   });
 });
 
+exports.product_create_get = asyncHandler(async (req, res, next) => {
+  const allCategories = await Category.find().sort({ name: 1 }).exec();
+
+  res.render("product_form", {
+    title: "Insert new product",
+    all_categories: allCategories,
+  });
+});
+
+exports.product_create_post = [
+  //validate and sanitize fields
+  body("title", "Title must not be empty.")
+    .trim()
+    .isLength({ min: 10, max: 500 })
+    .escape(),
+  body("description", "Description must not be empty.")
+    .trim()
+    .isLength({ min: 10, max: 500 })
+    .escape(),
+  body("price", "Price must not be empty.")
+    .notEmpty()
+    .isNumeric()
+    .isFloat({ min: 1 })
+    .toInt()
+    .escape(),
+  body("category", "Invalid category ").escape(),
+  body("image", "Image url must not be empty.")
+    .trim()
+    .isLength({ min: 1, max: 500 })
+    .isURL(),
+  body("quantity", "Quantity must not be empty.")
+    .trim()
+    .isNumeric()
+    .withMessage("Must be a number")
+    .isInt()
+    .withMessage("must be an integer")
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const product = new Product({
+      title: req.body.title,
+      description: req.body.description,
+      price: req.body.price,
+      category: req.body.category,
+      image: req.body.image,
+      quantity: req.body.quantity,
+    });
+
+    if (!errors.isEmpty()) {
+      const allCategories = await Category.find().sort({ name: 1 }).exec();
+
+      for (const category of allCategories) {
+        if (category.name === product.category) {
+          category.checked = "true";
+        }
+      }
+
+      res.render("product_form", {
+        title: "Create product",
+        product: product,
+        all_categories: allCategories,
+        errors: errors.array(),
+      });
+    } else {
+      await product.save();
+      res.redirect(product.url);
+    }
+  }),
+];
+
 exports.product_update_get = asyncHandler(async (req, res, next) => {
   const [product, allCategories] = await Promise.all([
     Product.findById(req.params.id).populate("category").exec(),
@@ -53,7 +125,7 @@ exports.product_update_get = asyncHandler(async (req, res, next) => {
   res.render("product_form", {
     title: "Update Product",
     product: product,
-    categories: allCategories,
+    all_categories: allCategories,
   });
 });
 
@@ -68,16 +140,21 @@ exports.product_update_post = [
     .isLength({ min: 10, max: 500 })
     .escape(),
   body("price", "Price must not be empty.")
-    .trim()
     .notEmpty()
     .isNumeric()
+    .isFloat({ min: 1 })
     .escape(),
   body("category", "Invalid category ").escape(),
   body("image", "Image url must not be empty.")
     .trim()
     .isLength({ min: 1, max: 500 })
     .isURL(),
-  body("quantity", "Quantity must not be empty.").trim().isNumeric().escape(),
+  body("quantity", "Quantity must not be empty.")
+    .isNumeric()
+    .withMessage("Must be a number")
+    .isInt()
+    .withMessage("must be an integer")
+    .escape(),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -93,7 +170,7 @@ exports.product_update_post = [
     });
 
     if (!errors.isEmpty()) {
-      const allCategories = await Category.find().exec();
+      const allCategories = await Category.find().sort({ name: 1 }).exec();
 
       for (const category of allCategories) {
         if (category.name === product.category) {
@@ -103,7 +180,7 @@ exports.product_update_post = [
       res.render("product_form", {
         title: "Update product",
         product: product,
-        categories: allCategories,
+        all_categories: allCategories,
         errors: errors.array(),
       });
       return;

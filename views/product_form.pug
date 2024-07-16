@@ -2,7 +2,9 @@ extends layout
 
 block content
   h1= title
-  p Product: #{product.title}
+  if product
+    p Product: #{product.title}
+    
 
   form#product-form(method="post") 
     label(for="title") Title: 
@@ -12,14 +14,17 @@ block content
     textarea#description(name="description", placeholder='Product description', cols="50" ,rows="20" required) #{(product === undefined ? '' : product.description)} 
     br
     label(for="price") Price: $
-    input#price(type="number", placeholder="Price", name="price", required value=(product === undefined ? "00.00" : product.price))
+    input#price(type="number", placeholder="Price", name="price" , step=".01", required value=(product === undefined ? "00.00" : product.price))
     br
     label(for="category") Category: 
     select#category(name="category" required)
       option(value='') --Please select an category-- 
-      for category in categories 
-        if product.category.name === category.name 
-          option(value=category._id selected) #{category.name}
+      for category in all_categories 
+        if product
+          if product.category.name === category.name 
+            option(value=category._id selected) #{category.name}
+          else 
+            option(value=category._id) #{category.name}
         else 
           option(value=category._id) #{category.name}
     br
@@ -29,7 +34,7 @@ block content
     label(for="quantity") Quantity in stock: 
     input#quantity(type="number", placeholder="Quantity", name="quantity" required, value=(product === undefined ? "" : product.quantity))
     br
-    button.blue-btn(type="submit") Update
+    button.blue-btn(type="submit") #{product === undefined ? "Submit"  : "Update"}
 
   if errors
     ul

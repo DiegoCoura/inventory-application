@@ -3,6 +3,8 @@ extends layout
 block content
   h1= title
   h2 Product: #{product.title}
+  hr
+  a(href="/") Home 
 
   div.product_detail-card
     img(src=product.image)
@@ -13,3 +15,4 @@ block content
     a(href=`${product.url}/update`) Update  product
     br
     a(href=`${product.url}/delete`) Delete  product
+
