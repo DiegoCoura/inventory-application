@@ -27,7 +27,11 @@ block content
     input#image(type="text", placeholder="Image URL", name='image', required value=(product === undefined ? "" : product.image))
     br
     label(for="quantity") Quantity in stock: 
-    input#quantity(type="number", placeholder="Quantity", required, value=(product === undefined ? "" : product.quantity))
+    input#quantity(type="number", placeholder="Quantity", name="quantity" required, value=(product === undefined ? "" : product.quantity))
     br
     button.blue-btn(type="submit") Update
 
+  if errors
+    ul
+      for error in errors 
+        li!= error.msg  
