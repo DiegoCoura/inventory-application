@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  ul 
+    if all_categories.length 
+      for category in all_categories 
+        li 
+          a(href=`${category.url}/delete`) #{category.name}
+      

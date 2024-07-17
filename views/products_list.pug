@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    a(href="/") Home 
+    if products.length 
+      p #[strong First you must delete the following products]
+      ul 
+      for product in products
+        li 
+          a(href=product.url) #{product.title}  
+       
+    else 
+      p.delete-confirmation #[strong Do you really want to delete this category?]
+      br
+      form(method="post") 
+        input#categoryid(type="hidden", name="categoryid", value=category._id)
+        button.delete-btn(type="submit") Delete  Category
