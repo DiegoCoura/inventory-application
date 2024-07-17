@@ -15,5 +15,9 @@ router.get('/product/:id/update', catalogController.product_update_get);
 
 router.post('/product/:id/update', catalogController.product_update_post);
 
+router.get('/product/:id/delete', catalogController.product_delete_get)
+
+router.post('/product/:id/delete', catalogController.product_delete_post)
+
 
 module.exports = router;

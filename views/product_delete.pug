@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  h2 Product: #{product.title}
+  hr
+  a(href="/") Home 
+
+  div.product_detail-card
+    img(src=product.image)
+    p Category: #{product.category.name}
+    p Description: #{product.description}
+    p Price $ #{product.price}
+    p Quantity in stock: #{product.quantity}
+    
+    br
+    p.delete-confirmation #[strong Do you really want to delete this product?]
+    br
+    form(method="post") 
+      input#productid(type="hidden", name="productid", value=product._id)
+      button.delete-btn(type="submit") Delete  product

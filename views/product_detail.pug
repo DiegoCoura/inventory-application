@@ -8,6 +8,7 @@ block content
 
   div.product_detail-card
     img(src=product.image)
+    p #{product.category.name}
     p #{product.description}
     p $ #{product.price}
     p Quantity in stock: #{product.quantity}

@@ -61,3 +61,23 @@ input[type="number"] {
 .product_detail-card img {
   height: 250px;
 }
+
+.delete-confirmation{
+  font-size: 1.2rem;
+}
+
+.delete-btn {
+  color: #fff;
+  background-color: red;
+  padding: 10px 20px;
+  border-radius: 18px;
+  font-weight: 800;
+  font-size: large;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s ease-out;
+}
+
+.delete-btn:hover{
+  transform: scale(1.05);
+}

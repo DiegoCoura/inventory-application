@@ -194,3 +194,33 @@ exports.product_update_post = [
     }
   }),
 ];
+
+exports.product_delete_get = asyncHandler(async (req, res, next) => {
+  const product = await Product.findById(req.params.id)
+    .populate("category")
+    .exec();
+
+  if (product === null) {
+    const err = new Error("Product not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("product_delete", {
+    title: "Delete Product",
+    product: product,
+  });
+});
+
+exports.product_delete_post = asyncHandler(async (req, res, next) => {
+  const product = await Product.findById(req.params.id).exec();
+
+  if (product === null) {
+    const err = new Error("Product not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  await Product.findByIdAndDelete(req.body.productid);
+  res.redirect("/catalog");
+});
