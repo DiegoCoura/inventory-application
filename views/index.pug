@@ -4,7 +4,10 @@ block content
   nav.header-navbar 
     h1= title
     div.edit-settings
-      a(href="/catalog/newproduct") Insert new product 
+      a.create-link(href="/catalog/createproduct") Insert new product 
+      a.create-link(href="/catalog/createcategory") Create new category 
+  
+  br
 
   if all_categories.length
     nav.categories-navbar 

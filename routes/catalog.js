@@ -5,9 +5,13 @@ const catalogController = require('../controllers/catalogController')
 
 router.get('/', catalogController.index);
 
-router.get('/newproduct', catalogController.product_create_get);
+router.get('/createproduct', catalogController.product_create_get);
 
-router.post('/newproduct', catalogController.product_create_post);
+router.post('/createproduct', catalogController.product_create_post);
+
+router.get('/createcategory', catalogController.category_create_get);
+
+router.post('/createcategory', catalogController.category_create_post);
 
 router.get('/product/:id', catalogController.product_detail);
 

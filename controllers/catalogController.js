@@ -224,3 +224,39 @@ exports.product_delete_post = asyncHandler(async (req, res, next) => {
   await Product.findByIdAndDelete(req.body.productid);
   res.redirect("/catalog");
 });
+
+exports.category_create_get = asyncHandler(async (req, res, next) => {
+  res.render("category_form", { title: "Create new category" });
+});
+
+exports.category_create_post = [
+  body("category", "Category must contain at least 3 characters")
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const category = new Category({ name: req.body.category });
+
+    if (!errors.isEmpty()) {
+      res.render("category_form", {
+        title: "Create new category",
+        category: category,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const categoryExists = await Category.findOne({ name: req.body.category })
+        .collation({ locale: "en", strength: 2 })
+        .exec();
+      if (categoryExists) {
+        res.redirect(categoryExists.url);
+      } else {
+        await category.save();
+        res.redirect("/");
+      }
+    }
+  }),
+];
