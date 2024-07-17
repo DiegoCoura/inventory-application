@@ -1,22 +1,7 @@
 extends layout
 
 block content
-  nav.header-navbar 
-    h1= title
-    div.edit-settings
-      a.create-link(href="/catalog/createproduct") Insert new product 
-      a.create-link(href="/catalog/createcategory") Create new category 
-  
-  br
-
-  if all_categories.length
-    nav.categories-navbar 
-      div 
-        h2 Categories
-      ul.categories-list 
-        for category in all_categories 
-          li
-            a(href=category.url) #{category.name} 
+  include partials/navbar.pug
 
   if all_products.length 
     div.products-container

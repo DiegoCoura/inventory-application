@@ -1,0 +1,20 @@
+
+block content
+  nav.header-navbar 
+    h1 
+      a(href="/") Dida's Store
+    div.edit-settings
+      a.create-link(href="/catalog/createproduct") Insert new product 
+      a.create-link(href="/catalog/createcategory") Create new category 
+      a.create-link(href="/catalog/categories") Delete category 
+  
+  br
+
+  if all_categories.length
+    nav.categories-navbar 
+      div 
+        h2 #{category === undefined ? "Categories" : category.name}
+      ul.categories-list 
+        for category in all_categories 
+          li
+            a(href=category.url) #{category.name} 
