@@ -225,6 +225,46 @@ exports.product_delete_post = asyncHandler(async (req, res, next) => {
   res.redirect("/catalog");
 });
 
+exports.categories_get = asyncHandler(async (req, res, next) => {
+  const allCategories = await Category.find({}, "name")
+    .sort({ name: 1 })
+    .exec();
+
+  if (allCategories === null) {
+    const err = new Error("Ops, something went wrong! Try again later");
+    err.status = 404;
+    return next(err);
+  }
+  res.render("categories_list", {
+    all_categories: allCategories,
+  });
+});
+
+exports.category_get_products = asyncHandler(async (req, res, next) => {
+  const [category, allCategories, products] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+    Category.find().sort({ name: 1 }).exec(),
+    Product.find({ category: req.params.id }).exec(),
+  ]);
+
+  if (products === null) {
+    const err = new Error("Products not found");
+    err.status = 404;
+    return next(err);
+  } else if (category === null) {
+    const err = new Error("Category not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("index", {
+    title: category.name,
+    category: category,
+    all_categories: allCategories,
+    all_products: products,
+  });
+});
+
 exports.category_create_get = asyncHandler(async (req, res, next) => {
   res.render("category_form", { title: "Create new category" });
 });
@@ -260,3 +300,45 @@ exports.category_create_post = [
     }
   }),
 ];
+
+exports.category_delete_get = asyncHandler(async (req, res, next) => {
+  const [category, products] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+    Product.find({ category: req.params.id }).sort({ title: 1 }).exec(),
+  ]);
+
+  if (category === null) {
+    const err = new Error("Category not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("products_list", {
+    category: category,
+    products: products,
+  });
+});
+
+exports.category_delete_post = asyncHandler(async (req, res, next) => {
+  const [category, products] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+    Product.find({ category: req.params.id }).sort({ title: 1 }).exec(),
+  ]);
+
+  if (category === null) {
+    const err = new Error("Category not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  if (products.length > 0) {
+    res.render("products_list", {
+      category: category,
+      products: products,
+    });
+    return
+  } else {
+    await Category.findByIdAndDelete(req.body.categoryid);
+    res.redirect("/");
+  }
+});
